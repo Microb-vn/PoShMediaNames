@@ -1,0 +1,29 @@
+{
+    "InputFolder": "",
+    "Photo": {
+        "Identifiers": [
+            "jpg",
+            "png"
+        ],
+        "InputYearPos": "3",
+        "InputMonthPos": "3",
+        "InputDayPos": "3",
+        "InputHourPos": "3",
+        "InputMinutePos": "3",
+        "InputSecondPos": "3",
+        "DesiredOutputMask": "YYYY-mmdd HHMMSS"
+    },
+    "video": {
+        "Identifiers": [
+            "mp4",
+            "mov"
+        ],
+        "InputYearPos": "3",
+        "InputMonthPos": "3",
+        "InputDayPos": "3",
+        "InputHourPos": "3",
+        "InputMinutePos": "3",
+        "InputSecondPos": "3",
+        "DesiredOutputMask": "YYYY-mmdd HHMMSS"
+    }
+}
