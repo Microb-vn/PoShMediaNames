@@ -55,6 +55,6 @@ Function Read_Config {
     If (($PhotoCount -ne 1) -or ($VideoCount -ne 1)) {
         Return "Mismatch in number of Video ($VideoCount) and/or Photo ($PhotoCount) objects in settingsfile ($settingsFileName); these should both be 1"
     }
-    Return $Object    
+    Return $Config   
 }
 

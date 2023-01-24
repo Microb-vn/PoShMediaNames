@@ -19,41 +19,64 @@
  
  Het gewenste datum&tijd formaat in de uitvoerbestandsnaam kan ook worden opgegeven
  in het settings.json bestand.
+.EXAMPLE
+ TRANSLATE IN ENGLISH!!!
 #>
 
 param ( 
     [switch]$Help = $False
 )
 
-# Preparations
+# Two functions that are needed almost instantly
+# Write a colorfull message :-)
+Function Write-Message ($severity, $message) {
+    $Now = get-date -Format "yyyyMMdd HHmmss"
+    switch ($severity) {
+        "INFO" {
+            Write-Host "$now - INFO: $message" -ForegroundColor green -BackgroundColor black
+        }
+        "WARNING" {
+            Write-Host "$now - WARNING: $message" -ForegroundColor Cyan -BackgroundColor Black
+        }
+        "ERROR" {
+            Write-Host "$now - ERROR: $message" -ForegroundColor Red -BackgroundColor Black
+        }
+        "FATAL" {
+            Write-Host "$now - FATAL: $message" -ForegroundColor Red -BackgroundColor blue
+        }
+    }    
+}
+# Universal Error and Stop codeblock
+$ErrorStop = {
+    write-host   "Execution of script will be stopped"
+    Pause 
+}
+
 ######################
 # Script starts here #
 ######################
+# Preparations
 clear-host
 $ErrorActionPreference = 'Stop'
 
 If ($Help) {
-    Get-Help "PoShMediaNames.ps1"
-    pause
+    Help "PoShMediaNames.ps1"
+    . $Errorstop
     Return
 }
 
+Write-Message "INFO" "Start of script execution..."
 # Script attribute values
 $ScriptPath = (split-path -parent $MyInvocation.MyCommand.Definition)
 $ScriptPathLibs = "$ScriptPath\.libs"
 $SettingsFileName = "$ScriptPath\settings.json"
 
-# Before anything else, load the write_message function
-$MessageLib = "$ScriptPathLibs\Write_Message.ps1"
-. $MessageLib
-
-Write-Message "INFO" "Start of script execution..."
 # Load the remaining include files
 Write-Message "INFO" "Loading powershell libraries"
 try {
     $AllLibs = Get-ChildItem -Path $ScriptPathLibs -Recurse | Where-Object { $_.PSIsContainer -ne $true } | Select-Object FullName, Extension
     foreach ($Lib in $AllLibs) {
-        if ($Lib.Extension -eq ".ps1" -and $Lib.FullName -ne $MessageLib) {
+        if ($Lib.Extension -eq ".ps1") {
             Write-Message "INFO" "   > Loading $($Lib.FullName)"
             . $Lib.FullName
         }
@@ -62,7 +85,7 @@ try {
 Catch {
     Write-Message "FATAL" "Cannot load libraries. Did you properly install the scripts?!?"
     Write-Message "FATAL" $_.Exception.Message
-    Pause
+    & $ErrorStop
     Return
 }
 
