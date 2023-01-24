@@ -25,30 +25,6 @@ param (
     [switch]$Help = $False
 )
 
-Function Write-Message ($severity, $message) {
-    $Now = get-date -Format "yyyyMMdd HHmmss"
-    switch ($severity) {
-        "INFO" {
-            Write-Host "$now - INFO: $message" -ForegroundColor green -BackgroundColor black
-        }
-        "WARNING" {
-            Write-Host "$now - WARNING: $message" -ForegroundColor Cyan -BackgroundColor Black
-        }
-        "ERROR" {
-            Write-Host "$now - ERROR: $message" -ForegroundColor Red -BackgroundColor Black
-        }
-        "FATAL" {
-            Write-Host "$now - FATAL: $message" -ForegroundColor Red -BackgroundColor blue
-        }
-    }    
-}
-
-# Universal Error and Stop codeblock
-$ErrorStop = {
-    write-host   "Execution of script will be stopped"
-    Pause 
-}
-
 # Preparations
 ######################
 # Script starts here #
@@ -58,23 +34,26 @@ $ErrorActionPreference = 'Stop'
 
 If ($Help) {
     Get-Help "PoShMediaNames.ps1"
-    & $ErrorStop
+    pause
     Return
 }
 
 # Script attribute values
-Write-Message "INFO" "Start of script execution..."
-
 $ScriptPath = (split-path -parent $MyInvocation.MyCommand.Definition)
 $ScriptPathLibs = "$ScriptPath\.libs"
 $SettingsFileName = "$ScriptPath\settings.json"
 
-# Load the include files
-Write-Message "INFO" "Loading powershell llibraries"
+# Before anything else, load the write_message function
+$MessageLib = "$ScriptPathLibs\Write_Message.ps1"
+. $MessageLib
+
+Write-Message "INFO" "Start of script execution..."
+# Load the remaining include files
+Write-Message "INFO" "Loading powershell libraries"
 try {
     $AllLibs = Get-ChildItem -Path $ScriptPathLibs -Recurse | Where-Object { $_.PSIsContainer -ne $true } | Select-Object FullName, Extension
     foreach ($Lib in $AllLibs) {
-        if ($Lib.Extension -eq ".ps1") {
+        if ($Lib.Extension -eq ".ps1" -and $Lib.FullName -ne $MessageLib) {
             Write-Message "INFO" "   > Loading $($Lib.FullName)"
             . $Lib.FullName
         }
@@ -83,39 +62,22 @@ try {
 Catch {
     Write-Message "FATAL" "Cannot load libraries. Did you properly install the scripts?!?"
     Write-Message "FATAL" $_.Exception.Message
-}
-
-# Find and read the settingsfile
-Write-Message "INFO" "Read the settingsfile"
-if (! (Test-Path $SettingsFileName)) {
-    Write-Message "ERROR" "COnfiguration file ($settingsFileName) cannot be found"
-    & $ErrorStop
+    Pause
     Return
 }
 
-Try {
-    $config = Get-Content $SettingsFileName  | ConvertFrom-Json
-}
-Catch {
-    Write-Message "FATAL" "Cannot read the settingsfile ($SettingsFileName)"
-    Write-MEssage "FATAL" "$($_.Exception.Message)"
+Write-Message "INFO" "Read the settingsfile"
+$config = Read_Config $SettingsFileName $ScriptPath 
+if ($config.GetType().Name -eq "String") {
+    Write-Message "FATAL" "$config"
     & $ErrorStop
     Return
 }
 
 # Find and collect all files from the ProcessFolder (RECURSIVELLY!)
-$TargetFolder = $config.ProcessFolder
-if ($TargetFolder[0] -eq ".") {
-    $TargetFolder = $TargetFolder.REplace(".", "$ScriptPath")
-}
-Write-Message "INFO" "Collect all media filenames from folder "
-if (! (Test-Path $TargetFolder)) {
-    Write-Message "ERROR" "Processfolder ($TargetFolder) specified in the settingsfile ($settingsFileName) cannot be found"
-    & $ErrorStop
-    Return
-}
+Write-Message "INFO" "Collect all media filenames from folder $($config.ProcessFolder)"
 
-$AllFiles = Get-ChildItem -Path $TargetFolder -Recurse | Where-Object { $_.PSIsContainer -ne $true } | Select FullName, Name, Extension
+$AllFiles = Get-ChildItem -Path $config.ProcessFolder -Recurse | Where-Object { $_.PSIsContainer -ne $true } | Select FullName, Name, Extension
 
 # Go thru all the files one by one to determine what type of file it is
 Write-Message "INFO" "Examine all media files"

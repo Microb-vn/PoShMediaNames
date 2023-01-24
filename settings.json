@@ -7,13 +7,13 @@
                 ".jpg",
                 ".png"
             ],
-            "InputYearPos": "3",
-            "InputMonthPos": "3",
-            "InputDayPos": "3",
-            "InputHourPos": "3",
-            "InputMinutePos": "3",
-            "InputSecondPos": "3",
-            "DesiredOutputMask": "YYYY-mmdd HHMMSS"
+            "InputYearPos": "0",
+            "InputMonthPos": "4",
+            "InputDayPos": "6",
+            "InputHourPos": "9",
+            "InputMinutePos": "11",
+            "InputSecondPos": "13",
+            "DesiredOutputMask": "yyyy-MMdd HHmmss"
         },
         {
             "Type": "video",
@@ -21,13 +21,13 @@
                 ".mp4",
                 ".mov"
             ],
-            "InputYearPos": "3",
-            "InputMonthPos": "3",
-            "InputDayPos": "3",
-            "InputHourPos": "3",
-            "InputMinutePos": "3",
-            "InputSecondPos": "3",
-            "DesiredOutputMask": "YYYY-mmdd HHMMSS"
+            "InputYearPos": "0",
+            "InputMonthPos": "4",
+            "InputDayPos": "6",
+            "InputHourPos": "9",
+            "InputMinutePos": "11",
+            "InputSecondPos": "13",
+            "DesiredOutputMask": "yyyy-MMdd HHmmss"
         }
     ]
 }
