@@ -34,6 +34,7 @@ function Process_Video {
         $second = $file.Name.Substring($InputSecondPos, 2)
     }
     Try {
+        Write-Message "INFO" "Will attempt to create a valid date from Video Filename ($($File.Name))."
         $FileNameDate = Get-date -Year $yyyy -Month $mm -Day $dd -Hour $hour -Minute $minute -Second $Second
     }
     Catch {
@@ -41,7 +42,7 @@ function Process_Video {
     }
 
     if (!$FileNameDate) {
-        Write-Message "WARNING" "Could not compose a valid date from Video Filname ($($File.Name)); will use the file creation date"
+        Write-Message "INFO" "Could not compose a valid date from Video Filname ($($File.Name)); will use the file creation date"
         $FileDetails = Get-ChildItem -Path $File.FullName | Select-Object Name, CreationTime
         $FileNameDate = $FileDetails.CreationTime
     }
@@ -51,8 +52,9 @@ function Process_Video {
         Write-Message "INFO" "Found desired date ($DateInDesiredFormat); filename ($($File.Name)) already has this format, no action required"
     }
     Else {
-        $NewFileName = "$DateInDesiredFormat - [$($File.Name)]"
-        Write-Message "INFO" "Found desired date ($DateInDesiredFormat). Will change filename of $($File.Name) to $NewFileName"
+        $NewFileName = "$DateInDesiredFormat - [{0}]{1}" -f $File.Name.replace($File.Extension, ""), $File.Extension
+        Write-Message "INFO" "Found desired date ($DateInDesiredFormat). Will change filename of -$($File.Name)- to -$NewFileName-"
+        Rename-Item -path $file.FullName -NewName $NewFileName
     }
     Return
 }
