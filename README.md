@@ -112,3 +112,21 @@ Month starts at 4,\
 Day starts at 6,\
 Hour starts at 9,\
 etc.
+
+## Using different configuration files
+
+To be able to support processing media taken by different devices - and when these devices use different file formats - you can create multiple configuration files. Just copy your settings.json file to a file with the name *\<device\>settings.json* and adjust the attributes where needed in that new file. Launch the script with parameter -SettingsFile *\<your-new-settingsfile-name\>*. Make sure the settingsfiles are in the same folder as the PoShmediaNames.ps1 script and you're good to go.
+
+## Launching the script
+
+Use the provided cmd file to launch the script, like described below:
+
+- Open a command prompt:\
+*Start->System->Command Prompt*
+- Change to the folder where your script is stored:\
+*cd \<Your-PoShMediaNames-Folder\>*
+- Run the cmdfile:\
+*PoShMediaNames.cmd* - (this will run the script with the default settingsfile -settings.json-)\
+*PoShMediaNames.cmd -settingsfile \<your-custom-settingsfile-name\>* - (this will run the script with the the settingsfile provided in the settingsfile parameter)
+
+> *For advanced users: If you have Powershell Core installed and rather work with that version of powershell, you can change the powershell Executable path in the third line of the cmd file to point to the Powershell Core executable (usually %ProgramFiles%\\PowerShell\7\pwsh.exe)*

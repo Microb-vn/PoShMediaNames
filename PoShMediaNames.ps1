@@ -24,7 +24,8 @@
 #>
 
 param ( 
-    [switch]$Help = $False
+    [switch]$Help = $False,
+    [String]$SettingsFile="settings.json"
 )
 
 # Two functions that are needed almost instantly
@@ -69,7 +70,7 @@ Write-Message "INFO" "Start of script execution..."
 # Script attribute values
 $ScriptPath = (split-path -parent $MyInvocation.MyCommand.Definition)
 $ScriptPathLibs = "$ScriptPath\.libs"
-$SettingsFileName = "$ScriptPath\settings.json"
+$SettingsFileName = "$ScriptPath\$SettingsFile"
 
 # Load the remaining include files
 Write-Message "INFO" "Loading powershell libraries"
@@ -106,6 +107,11 @@ $AllFiles = Get-ChildItem -Path $config.ProcessFolder -Recurse | Where-Object { 
 Write-Message "INFO" "Examine all media files"
 foreach ($file in $AllFiles) {
     $FileObject = $null
+    Write-Message "INFO" "------------------------------------------------"
+    if ($File.Fullname -like "*].*") {
+        Write-Message "WARNING" "It looks like file ($($File.Name)) has been processed before; will take no action!"
+        Continue
+    }
     foreach ($Object in $config.objects) {
         if ($Object.Identifiers -contains $file.Extension) {
             $FileObject = $Object
@@ -129,3 +135,5 @@ foreach ($file in $AllFiles) {
         Write-Message "WARNING" "File $($file.Fullname) is of an unknow file type ($($file.Extension)); will skip the file"
     }
 }
+Write-Message "INFO" "------------------------------------------------"
+Write-Message "INFO" "Done..."
