@@ -1,0 +1,39 @@
+{
+    "Mode": "ExifFullUpdate",
+    "ProcessFolder": ".\\ProcessFolder",
+    "ExifDeviceMake": "HP",
+    "ExifDeviceModel": "MFP M180N",
+    "ExifDateTime": "FromFileDetails",
+    "FileTitle": "ScannedImage",
+    "FileComment": "Scanned at 27-01-2023 12:00:00",
+    "Objects": [
+        {
+            "Type": "Photo",
+            "Identifiers": [
+                ".jpg",
+                ".png"
+            ],
+            "InputYearPos": "0",
+            "InputMonthPos": "5",
+            "InputDayPos": "7",
+            "InputHourPos": "10",
+            "InputMinutePos": "12",
+            "InputSecondPos": "14",
+            "DesiredOutputMask": "yyyy-MMdd HHmmss"
+        },
+        {
+            "Type": "video",
+            "Identifiers": [
+                ".mp4",
+                ".mov"
+            ],
+            "InputYearPos": "0",
+            "InputMonthPos": "4",
+            "InputDayPos": "6",
+            "InputHourPos": "9",
+            "InputMinutePos": "11",
+            "InputSecondPos": "13",
+            "DesiredOutputMask": "yyyy-MMdd HHmmss"
+        }
+    ]
+}

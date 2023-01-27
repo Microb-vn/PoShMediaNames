@@ -36,7 +36,13 @@ The configuration is arranged with a *settings.json* file. This file typically l
 
 ```json
 {
+    "Mode": "Standard",
     "ProcessFolder": ".\\ProcessFolder",
+    "ExifDeviceMake": "HP",
+    "ExifDeviceModel": "MFP M180N",
+    "ExifDateTime": "{datetime}",
+    "FileTitle": "ScannedImage",
+    "FileComment": "Scanned at {datetime}",
     "Objects": [
         {
             "Type": "Photo",
@@ -74,6 +80,12 @@ where the fields/attributes are:
 
 | Fieldname | Value |
 | --- | --- |
+| Mode | Processing Mode. This can be one of following values:<br>**Standard:** The media files are analyzed, data is taken from the file and/or Exif details and the filenames are updated<br>**ExifFullUpdate:** The media files are analyzed, and only Photos are processed. Data is taken from the settingsfile (see next settings attributes), and the Exif data is updated. Usefull for updating photos that are scanned or copied using a scanner/camera. | 
+| ExifDeviceMake | When mode is ExifFullUpdate, this value can be used to store the Device Make in the Exif "Manufacturer" field. Only used when it contains a non-blank value |
+| ExifDeviceModel | When mode is ExifFullUpdate, this value can be used to store the Device Model in the Exif "Model" field. Only used when it contains a non-blank value |
+| ExifDateTime | This can have following values:<br>**FromFileDetails**: The script will make an attempt to extract the date & time from either the Filename (using the Input\<type\>Pos attributes in the settings file. When that fails, it will use the File's Creation Date and Time to set the ExifDateTime.<br>**\<Hardcoded-DateTime\>**: A valid Date&Time value, that will be used to set the ExifDateTime.  |
+| ExifTitle | Can be used to set the Title. Possible use is to set this to the method how the image is aquired (e.g. Scanned, Copied with MobilePhone, etc..) |
+| ExifComment | Used to add any additional comment, like "Scanned at \<Hardcoded-DateTime\>" |
 | ProcessFolder | The folder that contains the photo and video files that you want to analyze/change. This folder can best be used to copy/paste all media you want to process into. After processing - and when satisfied with the processing results - you can use the contents of this folder to replace the original media. |
 | Objects | The two possible filetypes that can be encountered in the ProcessFolder. Per object, following can be specified: |
 | Type | Can be Photo or Video. There should be one Object of each. |
@@ -100,6 +112,8 @@ where the fields/attributes are:
 >   - a . (period), which means the folder is in the ScriptFolder, so in the same folder as where the script is in. So, when the sript is in folder *c:\users\myuser\PoShMediaNames*, *.\\MyFiles* will mean the ProcessFolder is *c:\users\myuser\PoShMediaNames\MyFiles*.
 >    - a ~ (tilde), which means the folder is in the user's home folder. So, when *~\\MyFiles* is specified (and I am user *mysuser*), the processfolder will be *c:\users\myuser\MyFiles*.
 
+> -----------------------------
+
 > About the **Input positions**:\
 The positions are ZERO BASED, meaning that the first character in the filename is 0, the second is 1, etc. So, when the filename is 20220812_131533.mp4, the positions are:
 ```text
@@ -116,6 +130,11 @@ etc.
 ## Using different configuration files
 
 To be able to support processing media taken by different devices - and when these devices use different file formats - you can create multiple configuration files. Just copy your settings.json file to a file with the name *\<device\>settings.json* and adjust the attributes where needed in that new file. Launch the script with parameter -SettingsFile *\<your-new-settingsfile-name\>*. Make sure the settingsfiles are in the same folder as the PoShmediaNames.ps1 script and you're good to go.
+
+> -----------------------------
+
+> About **processing scanned images**:\
+Best approach to process scanned images, is to first perform a "Standard" analyses to organize/format the filenames with the date&time of file creation, and then run a "ExifFullUpdate" using Exif*** and File*** settingsfile attributes, together with the date&time set in the filenames during the "Standard" run.  You can use two different settingfiles for this purpose.
 
 ## Launching the script
 
