@@ -1,6 +1,6 @@
 function CreateNewpropertyItem {
 	$img = [System.Drawing.Image]::Fromfile("$PSScriptRoot\PropertyItemSource.jpg")
-	# $img.PropertyItems
+
 	$item = $img.psbase.GetPropertyItem(271)
 	$item.Id = 0
 	$item.Len = 0
@@ -21,19 +21,22 @@ Function Update_ExifData {
 		$Updates
 	)
 
-	if (! (Test-Path -LiteralPath $FileName)) {
+	if (!(Test-Path -LiteralPath $FileName)) {
 		Return "Function Update_ExifData: Failed to update ExifData, could not file file $filename"
 	}
 
 	$File = $FileName
-	$img = [System.Drawing.Image]::Fromfile($file);
-	$img.PropertyItems
+	$CopyFileName = "$File.~tmp@#.jpg"
+	# Create a working copy, as you cannot write changes back to the opened file
+	Copy-Item -LiteralPath $File -Destination $CopyFileName -Force
+	$img = [System.Drawing.Image]::Fromfile($CopyFileName);
 
 	Foreach ($Update in $Updates) {
 		# Prepare value for store/update (MUST BE STRING!!)
 		$s = $Update.PropertyValue
 		$a = $s.ToCharArray()
 		$a += $null
+		$alen = $a.Length
 	
 		# See if we can get a property with the requested number
 		Try {
@@ -45,20 +48,30 @@ Function Update_ExifData {
 		if (!$Item) {
 			#Add
 			$Me = CreateNewpropertyItem
-			$Me.Id = $Update.ProperyNr
+			$Me.Id = $Update.PropertyNr
 			$Me.Type = 2
 			$Me.Value = ($a)
-			$img.SetPropertyItem($Me)
+			$me.Len = $alen
+			$img.SetPropertyItem($Me) | out-null
 		}
 		Else {
 			#Update
 			$item.Value = ($a)
-			$img.SetPropertyItem($item)
+			$item.Len = $alen
+			$img.SetPropertyItem($item) | out-null
 		}
 	}
-	$img.Save($FileName)
+	Try {
+		#Now just save it back to the original file:
+		$Changes = $img.save($File)
+		$img.Dispose()
+		# Remove the working copy
+		remove-item -LiteralPath $CopyFileName
+		Return "Ok"
+	}
+	Catch {
+		$ErrorMsg = "Function Update_ExifData: Error while updating image: $($Error[0].Exception.message)"
+		Return $ErrorMsg
+	}
 }
-#Now just save it back to a file:
-
-
 

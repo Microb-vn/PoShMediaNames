@@ -16,17 +16,24 @@ function Process_Photo {
     # Try to extract the Exif data
     $ExifData = Extract_ExifData $file.FullName
     if ($ExifData.GetType().name -ne "String") {
-        Write-Message "INFO" "Found valid EXIF data in photo file ($($File.Name))."
-        $yyyy = $ExifData.Data.Substring(0, 4)
-        $mm = $ExifData.Data.Substring(5, 2)
-        $dd = $ExifData.Data.Substring(8, 2)
-        $hour = $ExifData.Data.Substring(11, 2)
-        $minute = $ExifData.Data.Substring(14, 2)
-        $second = $ExifData.Data.Substring(17, 2)
-        $FileNameDate = Get-Date -Year $yyyy -Month $mm -Day $dd -Hour $hour -Minute $minute -Second $Second
+        Write-Message "INFO" "Found EXIF data in photo file ($($File.Name))."
+        Try {
+            # Try to get date info
+            $yyyy = $ExifData.Data.Substring(0, 4)
+            $mm = $ExifData.Data.Substring(5, 2)
+            $dd = $ExifData.Data.Substring(8, 2)
+            $hour = $ExifData.Data.Substring(11, 2)
+            $minute = $ExifData.Data.Substring(14, 2)
+            $second = $ExifData.Data.Substring(17, 2)
+            $FileNameDate = Get-Date -Year $yyyy -Month $mm -Day $dd -Hour $hour -Minute $minute -Second $Second
+            $ExifDateFound = $True
+        }
+        Catch {
+            $ExifDate = $False
+        }   
     }
-    Else {
-        Write-Message "INFO" "Photo file ($($File.Name)) does not contain EXIF data (!?!)."
+    If (!$ExifDate) {
+        Write-Message "INFO" "Photo file ($($File.Name)) does not contain valid or complete EXIF data; will use the filename to compose date."
         # Try to convert the data of the current filename into a proper date
         $dd = $mm = $yyyy = $hour = $minute = $second = $null
         if ($File.Name.Length -ge [int]$InputDayPos + 2) {
@@ -48,7 +55,6 @@ function Process_Photo {
             $second = $file.Name.Substring($InputSecondPos, 2)
         }
         Try {
-            Write-Message "INFO" "Will attempt to create a valid date from Photo Filename ($($File.Name))."
             $FileNameDate = Get-date -Year $yyyy -Month $mm -Day $dd -Hour $hour -Minute $minute -Second $Second
         }
         Catch {
@@ -66,11 +72,46 @@ function Process_Photo {
     $DateInDesiredFormat = get-date -Date $FileNameDate -f "$($FileObject.DesiredOutputMask)"
     if ($File.Name.StartsWith($DateInDesiredFormat)) {
         Write-Message "INFO" "Found desired date ($DateInDesiredFormat); filename ($($File.Name)) already has this format, no action required"
+        $ExifFileName = $File.FullName
     }
     Else {
         $NewFileName = "$DateInDesiredFormat - [{0}]{1}" -f $File.Name.replace($File.Extension, ""), $File.Extension
         Write-Message "INFO" "Found desired date ($DateInDesiredFormat). Will change filename of -$($File.Name)- to -$NewFileName-"
         Rename-Item -path $file.FullName -NewName $NewFileName
+        $ExifFileName = $File.Fullname.REplace($File.Name, $NewFileName)
+    }
+    if (!$ExifDate) {
+        # There is no ExifData yet, create the basic info
+        Write-Message "INFO" "As no valid Exif data is found, will update that with what was found during this scan"
+        
+        $NewObsjFields = "PropertyNr", "PropertyValue"
+        $ExifObjects = @()
+
+        $NewObj = "" | Select-Object $NewObsjFields
+        $NewObj.PropertyNr = 271
+        $NewObj.PropertyValue = "ADDED_BY_SCRIPT"
+        $ExifObjects += $NewObj
+
+        $NewObj = "" | Select-Object $NewObsjFields
+        $NewObj.PropertyNr = 272
+        $NewObj.PropertyValue = "UNKNOWN"
+        $ExifObjects += $NewObj
+
+        $NewObj = "" | Select-Object $NewObsjFields
+        $NewObj.PropertyNr = 36868
+        $NewObj.PropertyValue = "{0:0000}:{1:00}:{2:00} {3:00}:{4:00}:{5:00}" -f `
+            $FileNameDate.Year, `
+            $FileNameDate.Month, `
+            $FileNameDate.Day, `
+            $FileNameDate.Hour, `
+            $FileNameDate.Minute, `
+            $FileNameDate.Second
+        $ExifObjects += $NewObj
+
+        $Return = Update_ExifData  $ExifFileName $ExifObjects
+        If ($REturn -ne "Ok") {
+            Write-Message "WARNING" $Return
+        }
     }
     Return
 }

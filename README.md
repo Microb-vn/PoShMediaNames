@@ -28,7 +28,7 @@ For each Photo file found, it will:
 - The found date is formatted into the desired (configurable) date format.
 - The formatted date is compared to the filename. When the filename already starts with the formatted dat, no action is taken to change the filename.
 - When the filename does not start with the formatted date, the photo file is renamed to *formatted-date&time - [old-filename]*
-- Also, when no valid EXIF data could be extracted from the picture, the EXIF date&time will be set as well. The Camera details in the EXIF data will be set to "ADDED BY SCRIPT" and "PRBBLE_SCAN"
+- Also, when no valid EXIF data could be extracted from the picture, the EXIF date&time will be set as well. The Camersa details in the EXIF data will be set to "ADDED BY SCRIPT" and "UNKNOW"
 
 ## Configuration
 
