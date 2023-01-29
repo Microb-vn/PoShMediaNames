@@ -17,7 +17,7 @@ For each Video file found, it will:
 - Attempt to determine the date&time the video is created using it's filename. Using the fact that most (if not all) digital camera's create video files with names based on date&time of creation, this will be the prefered method of determining the media's creation date and time.
 - When this fails, it will use the file's creation date and time. This is less accurate, because this will most probably be the time the video file is copied from the digital camera to your computer. Mind you, that in some instances the creation date is the actual date the file is saved on your camera.
 - The found date is formatted into the desired (configurable) date format.
-- The formatted date is compared to the filename. When the filename already starts with the formatted dat, no action is taken to change the filename.
+- The formatted date is compared to the filename. When the filename already starts with the formatted date, no action is taken to change the filename.
 - When the filename does not start with the formatted date, the video file is renamed to *formatted-date&time - [old-filename]*
 
 For each Photo file found, it will:
@@ -26,9 +26,9 @@ For each Photo file found, it will:
 - When that fails, it will try to determine the date&time the photo is created using it's filename. Using the fact that most (if not all) digital camera's create video files with names based on date&time of creation, this will be the second best method of determining the media's creation date and time.
 - When this also fails, it will use the file's creation date and time. This is less accurate, because this will most probably be the time the photo file is copied from the digital camera to your computer. Mind you, that in some instances the creation date is the actual date the file is saved on your camera.
 - The found date is formatted into the desired (configurable) date format.
-- The formatted date is compared to the filename. When the filename already starts with the formatted dat, no action is taken to change the filename.
+- The formatted date is compared to the filename. When the filename already starts with the formatted date, no action is taken to change the filename.
 - When the filename does not start with the formatted date, the photo file is renamed to *formatted-date&time - [old-filename]*
-- Also, when no valid EXIF data could be extracted from the picture, the EXIF date&time will be set as well. The Camersa details in the EXIF data will be set to "ADDED BY SCRIPT" and "UNKNOW"
+- Also, when no valid EXIF data could be extracted from the picture, the EXIF date&time will be set as well. The Camera details in the EXIF data will be set to "ADDED BY SCRIPT" and "UNKNOW"
 
 ## Configuration
 
