@@ -17,6 +17,31 @@ Function Read_Config {
     }
 
     # Screen the JSON file content
+    # ProcessingMode
+    if (@("Standard", "ExifFullUpdate") -notcontains $config.mode) {
+        Return "Mode ($($config.mode)) in the settingsfile ($settingsFileName) is not Standard or ExifFullUpdate"
+    }
+    if ($config.mode -eq "ExifFullUpdate") {
+        # Test for required attributes
+        Try {
+            $dummy = $config.ExifDeviceMake
+            $dummy = $config.ExifDeviceModel
+            $dummy = $config.ExifDateTime
+            $dummy = $config.FileTitle
+        }
+        Catch {
+            Return "When mode is ExifFullUpdate, attributes, ExifDeviceMake, ExifDeviceModel, ExifDateTime, and FileTitle must also be defined"
+        }
+        If ($config.ExifDateTime -ne "FromFileDetails") {
+            try{
+                $Dummy = $Config.ExifDateTime | Get-Date
+            }
+            Catch {
+                Return "The specified ExifDateTime ($($Config.ExifDateTime)) in the settingsfile ($settingsFileName) is not a valid date; use your localized data format, or specify 'FromFileDetails'!"
+            }
+        }
+    
+    }
     # Field: ProcessFolder
     if ($config.ProcessFolder[0] -eq ".") {
         $config.ProcessFolder = $config.ProcessFolder.Replace(".", "$ScriptPath")

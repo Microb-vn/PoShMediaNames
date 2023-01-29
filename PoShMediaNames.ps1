@@ -90,7 +90,7 @@ Catch {
     Return
 }
 
-Write-Message "INFO" "Read the settingsfile"
+Write-Message "INFO" "Read the settingsfile $SettingsFileName"
 $config = Read_Config $SettingsFileName $ScriptPath 
 if ($config.GetType().Name -eq "String") {
     Write-Message "FATAL" "$config"
@@ -120,12 +120,22 @@ foreach ($file in $AllFiles) {
     }
     if ($FileObject) {
         if ($FileObject.Type -eq "Photo") {
-            Write-Message "INFO" "File $($file.fullname) is a PHOTO file; will process it as such"
-            Process_Photo $file $FileObject
+            Write-Message "INFO" "File $($file.fullname) is a PHOTO file; will process it as such in $($config.mode) mode"
+            if ($config.mode -eq "Standard") {
+                Process_Photo $file $FileObject
+            }
+            Else {
+                Process_Photo_Exif $file $FileObject $config
+            }
         }
         ElseIf ($FileObject.Type -eq "Video") {
+            if ($Config.mode -ne "Standard") {
+                Write-Message "WARNING" "File $($file.FullName) is a VIDEO file; ExifFullUpdate for Video files is not supported. Skipped!"
+            }
+            Else {
             Write-Message "INFO" "File $($file.FullName) is a VIDEO file; will process it as such"
             Process_Video $file $FileObject
+            }
         }
         Else {
             Write-Message "FATAL" "THIS SHOULD NEVER HAPPEN. INFORM PROGRAMMER (OBJECT FOUND FOR FILE THAT IS PHOTO NOR VIDEO!!)"

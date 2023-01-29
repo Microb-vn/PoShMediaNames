@@ -34,7 +34,7 @@ Function Update_ExifData {
 	Foreach ($Update in $Updates) {
 		# Prepare value for store/update (MUST BE STRING!!)
 		$s = $Update.PropertyValue
-		$a = $s.ToCharArray()
+		$a =  [System.Text.ASCIIEncoding]::ASCII.GetBytes($s) # Convert to byte string
 		$a += $null
 		$alen = $a.Length
 	
@@ -52,13 +52,13 @@ Function Update_ExifData {
 			$Me.Type = 2
 			$Me.Value = ($a)
 			$me.Len = $alen
-			$img.SetPropertyItem($Me) | out-null
+			$img.SetPropertyItem($Me)
 		}
 		Else {
 			#Update
 			$item.Value = ($a)
 			$item.Len = $alen
-			$img.SetPropertyItem($item) | out-null
+			$img.SetPropertyItem($item)
 		}
 	}
 	Try {

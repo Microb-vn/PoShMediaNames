@@ -5,11 +5,22 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "PowerShell: Launch Current File",
+            "name": "Standard",
             "type": "PowerShell",
             "request": "launch",
             "script": "${file}",
-            "args": []
+            "args": [
+                "-settingsfile settings.json"
+            ]
+        },
+        {
+            "name": "ExifFullUpdate",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${file}",
+            "args": [
+                "-settingsfile scanpicturesettings.json"
+            ]
         }
     ]
 }

@@ -2,10 +2,9 @@
     "Mode": "ExifFullUpdate",
     "ProcessFolder": ".\\ProcessFolder",
     "ExifDeviceMake": "HP",
-    "ExifDeviceModel": "MFP M180N",
+    "ExifDeviceModel": "MFP M180N (scanner)",
     "ExifDateTime": "FromFileDetails",
-    "FileTitle": "ScannedImage",
-    "FileComment": "Scanned at 27-01-2023 12:00:00",
+    "FileTitle": "Image was SCANNED at 27-01-2023 12:00:00",
     "Objects": [
         {
             "Type": "Photo",

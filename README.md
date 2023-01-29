@@ -80,12 +80,11 @@ where the fields/attributes are:
 
 | Fieldname | Value |
 | --- | --- |
-| Mode | Processing Mode. This can be one of following values:<br>**Standard:** The media files are analyzed, data is taken from the file and/or Exif details and the filenames are updated<br>**ExifFullUpdate:** The media files are analyzed, and only Photos are processed. Data is taken from the settingsfile (see next settings attributes), and the Exif data is updated. Usefull for updating photos that are scanned or copied using a scanner/camera. | 
+| Mode | Processing Mode. This can be one of following values:<br>**Standard:** The media files are analyzed, data is taken from the file and/or Exif details and the filenames are updated<br>**ExifFullUpdate:** The media files are analyzed, and only Photos are processed. Data is taken from the settingsfile (see next settings attributes), and the Exif data is updated. Usefull for updating photos that are scanned or copied using a scanner/camera.<br>*Note: Whichever method is used, the script will always attempt to keep the desired filename date and the Exif Date the same!* | 
 | ExifDeviceMake | When mode is ExifFullUpdate, this value can be used to store the Device Make in the Exif "Manufacturer" field. Only used when it contains a non-blank value |
 | ExifDeviceModel | When mode is ExifFullUpdate, this value can be used to store the Device Model in the Exif "Model" field. Only used when it contains a non-blank value |
-| ExifDateTime | This can have following values:<br>**FromFileDetails**: The script will make an attempt to extract the date & time from either the Filename (using the Input\<type\>Pos attributes in the settings file. When that fails, it will use the File's Creation Date and Time to set the ExifDateTime.<br>**\<Hardcoded-DateTime\>**: A valid Date&Time value, that will be used to set the ExifDateTime.  |
-| ExifTitle | Can be used to set the Title. Possible use is to set this to the method how the image is aquired (e.g. Scanned, Copied with MobilePhone, etc..) |
-| ExifComment | Used to add any additional comment, like "Scanned at \<Hardcoded-DateTime\>" |
+| ExifDateTime | When mode is ExifFullUpdate, this can have following values:<br>**FromFileDetails**: The script will make an attempt to extract the date & time from either the Filename (using the Input\<type\>Pos attributes in the settings file. When that fails, it will use the File's Creation Date and Time to set the ExifDateTime.<br>**\<Hardcoded-DateTime\>**: A valid Date&Time value, that will be used to set the ExifDateTime. Entering a value here is required!  |
+| ExifTitle | When mode is ExifFullUpdate, can be used to set the Title. Possible use is to set this to the method how the image is aquired (e.g. "Scanned at \<Hardcoded-DateTime\>", Copied with MobilePhone, etc..). . Only used when it contains a non-blank value |
 | ProcessFolder | The folder that contains the photo and video files that you want to analyze/change. This folder can best be used to copy/paste all media you want to process into. After processing - and when satisfied with the processing results - you can use the contents of this folder to replace the original media. |
 | Objects | The two possible filetypes that can be encountered in the ProcessFolder. Per object, following can be specified: |
 | Type | Can be Photo or Video. There should be one Object of each. |
@@ -134,7 +133,7 @@ To be able to support processing media taken by different devices - and when the
 > -----------------------------
 
 > About **processing scanned images**:\
-Best approach to process scanned images, is to first perform a "Standard" analyses to organize/format the filenames with the date&time of file creation, and then run a "ExifFullUpdate" using Exif*** and File*** settingsfile attributes, together with the date&time set in the filenames during the "Standard" run.  You can use two different settingfiles for this purpose.
+Best approach to process scanned images, is to first perform a "Standard" analyses to organize/format the filenames with the date&time of file creation, and then run a "ExifFullUpdate" using Exif*** and File*** settingsfile attributes, together with the date&time set in the filenames during the "Standard" run (so specify *FromFileDetails* and use the proper Input*Pos values from the new filenames!) .  You can use two different settingfiles for this purpose.
 
 ## Launching the script
 
