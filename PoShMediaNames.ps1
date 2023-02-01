@@ -108,7 +108,7 @@ Write-Message "INFO" "Examine all media files"
 foreach ($file in $AllFiles) {
     $FileObject = $null
     Write-Message "INFO" "------------------------------------------------"
-    if ($File.Fullname -like "*].*") {
+    if (($File.Fullname -like "*].*") -and ($config.mode -eq "Standard")) {
         Write-Message "WARNING" "It looks like file ($($File.Name)) has been processed before; will take no action!"
         Continue
     }

@@ -130,12 +130,37 @@ etc.
 
 To be able to support processing media taken by different devices - and when these devices use different file formats - you can create multiple configuration files. Just copy your settings.json file to a file with the name *\<device\>settings.json* and adjust the attributes where needed in that new file. Launch the script with parameter -SettingsFile *\<your-new-settingsfile-name\>*. Make sure the settingsfiles are in the same folder as the PoShmediaNames.ps1 script and you're good to go.
 
-> -----------------------------
+### About **processing scanned- or photo images**:
 
-> About **processing scanned images**:\
-Best approach to process scanned images, is to first perform a "Standard" analyses to organize/format the filenames with the date&time of file creation, and then run a "ExifFullUpdate" using Exif*** and File*** settingsfile attributes, together with the date&time set in the filenames during the "Standard" run (so specify *FromFileDetails* and use the proper Input*Pos values from the new filenames!) .  You can use two different settingfiles for this purpose.
+Best approach to process scanned images depends on the images you scan. Look at the below scenario's for different approaches:
 
-## Launching the script
+### Scanned images for an event that took place on a special day...
+
+... where the time&date does not matter to much, you can name your images all the same, and add a sequence number to heep the on the correct display order, e.g.\
+010 Our daytrip to Rio.jpg\
+020 Our daytrip to Rio.jpg\
+030 Our daytrip to Rio-Stop at Gasstation.jpg\
+etc..
+
+Once you're done with all images, perform a "ExifFullUpdate" run, with "ExifDateTime" hardcoded to the date&time you took the trip
+
+### Scanned images for an event that spans several days
+
+You name all images with a filename including a date&time, like this:
+
+2023-0628 081000 Our to Rio- Departure.jpg\
+2023-0628 121500 Our to Rio- On the way.jpg\
+2023-0628 181500 Our to Rio-Arrival at the hotel.jpg\
+2023-0629 081500 Our to Rio-Breakfast at the hotel.jpg\
+etc..
+
+Once you're done with all images, perform a "ExifFullUpdate" run, with "ExifDateTime" coded with value "FromFileDetails".
+
+### Photo's
+
+Just run a "Standard" run, that should do the trick.
+
+## Launching the script using different configurations
 
 Use the provided cmd file to launch the script, like described below:
 

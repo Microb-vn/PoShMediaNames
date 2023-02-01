@@ -58,11 +58,16 @@ function Process_Photo_Exif {
     # Change the date/time in the desired format
     $DateInDesiredFormat = get-date -Date $FileNameDate -f "$($FileObject.DesiredOutputMask)"
     if ($File.Name.StartsWith($DateInDesiredFormat)) {
-        Write-Message "INFO" "Found desired date ($DateInDesiredFormat); filename ($($File.Name)) already has this format, no action required"
+        Write-Message "INFO" "Found desired date ($DateInDesiredFormat); filename ($($File.Name)) already has this date in the correct format, no action required"
         $ExifFileName = $File.FullName
     }
     Else {
-        $NewFileName = "$DateInDesiredFormat - [{0}]{1}" -f $File.Name.replace($File.Extension, ""), $File.Extension
+        If ($File.Fullname -like "*].*") {
+            $NewFileName = "$DateInDesiredFormat - {0}" -f $File.Name.Substring(19)
+        }
+        Else {
+            $NewFileName = "$DateInDesiredFormat - [{0}]{1}" -f $File.Name.replace($File.Extension, ""), $File.Extension
+        }
         Write-Message "INFO" "Found desired date ($DateInDesiredFormat). Will change filename of -$($File.Name)- to -$NewFileName-"
         Rename-Item -path $file.FullName -NewName $NewFileName
         $ExifFileName = $File.Fullname.REplace($File.Name, $NewFileName)
