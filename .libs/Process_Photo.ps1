@@ -26,7 +26,7 @@ function Process_Photo {
             $minute = $ExifData.Data.Substring(14, 2)
             $second = $ExifData.Data.Substring(17, 2)
             $FileNameDate = Get-Date -Year $yyyy -Month $mm -Day $dd -Hour $hour -Minute $minute -Second $Second
-            $ExifDateFound = $True
+            $ExifDate = $True
         }
         Catch {
             $ExifDate = $False
