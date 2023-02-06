@@ -2,7 +2,7 @@
 
 A set of powershell scripts to easier organize/standardize you photo and video file library based on the picture and video filenames.
 
-I developed this because of a personal desire to standardize my photo and video library. This script helped me to organize my pictures and videos based on the filename, which - after runnning this script - includes the date the media is created in a standard format. This makes the media more easy to organize and sort, even if you have devices that use different file naming standards to store their photos/videos.
+I developed this because of a personal desire to standardize my photo and video library. This script helped me to organize my pictures and videos based on the filename, which - after runnning this script - includes the date the media is created in a standard format. This makes the media more easy to organize and sort, even if you have multiple imaging devices that use different file naming standards to store their photos/videos.
 
 The project may not suit your needs, but if it does, feel free to use it.
 
@@ -15,14 +15,14 @@ The main script will scan a designated (configurable) folder for photo and video
 For each Video file found, it will:
 
 - Attempt to determine the date&time the video is created using it's filename. Using the fact that most (if not all) digital camera's create video files with names based on date&time of creation, this will be the prefered method of determining the media's creation date and time.
-- When this fails, it will use the file's creation date and time. This is less accurate, because this will most probably be the time the video file is copied from the digital camera to your computer. Mind you, that in some instances the creation date is the actual date the file is saved on your camera.
+- When this fails, and a date cannot be composed using the filename, it will use the file's creation date and time. This is less accurate, because this will most probably be the time the video file is copied from the digital camera to your computer. Mind you, that in some instances the creation date is the actual date the file is saved on your camera.
 - The found date is formatted into the desired (configurable) date format.
 - The formatted date is compared to the filename. When the filename already starts with the formatted date, no action is taken to change the filename.
 - When the filename does not start with the formatted date, the video file is renamed to *formatted-date&time - [old-filename]*
 
 For each Photo file found, it will:
 
-- Attempt to extract the date&time from the photo's EXIF data. This data is embedded in the photo file itself, and is the most reliable date&time the picture is taken.
+- Attempt to extract the date&time from the photo's EXIF data. This data is embedded in the photo file itself, and is the most reliable date&time source for when the picture is taken.
 - When that fails, it will try to determine the date&time the photo is created using it's filename. Using the fact that most (if not all) digital camera's create video files with names based on date&time of creation, this will be the second best method of determining the media's creation date and time.
 - When this also fails, it will use the file's creation date and time. This is less accurate, because this will most probably be the time the photo file is copied from the digital camera to your computer. Mind you, that in some instances the creation date is the actual date the file is saved on your camera.
 - The found date is formatted into the desired (configurable) date format.
@@ -80,7 +80,7 @@ where the fields/attributes are:
 
 | Fieldname | Value |
 | --- | --- |
-| Mode | Processing Mode. This can be one of following values:<br>**Standard:** The media files are analyzed, data is taken from the file and/or Exif details and the filenames are updated<br>**ExifFullUpdate:** The media files are analyzed, and only Photos are processed. Data is taken from the settingsfile (see next settings attributes), and the Exif data is updated. Usefull for updating photos that are scanned or copied using a scanner/camera.<br>*Note: Whichever method is used, the script will always attempt to keep the desired filename date and the Exif Date the same!* | 
+| Mode | Processing Mode. This can be one of following values:<br>**Standard:** The media files are analyzed, data is taken from the file and/or Exif details and the filenames are updated<br>**ExifFullUpdate:** The media files are analyzed, and only Photos are processed differently (Video's will be treated according the 'Standard' method). Photo data is taken from the settingsfile (see next settings attributes), and the Exif data is updated with that information. Usefull for updating photo images that are scanned or copied using a scanner/camera.<br>*Note: Whichever method is used, the script will always attempt to keep the desired filename date and the Exif Date the same!* | 
 | ExifDeviceMake | When mode is ExifFullUpdate, this value can be used to store the Device Make in the Exif "Manufacturer" field. Only used when it contains a non-blank value |
 | ExifDeviceModel | When mode is ExifFullUpdate, this value can be used to store the Device Model in the Exif "Model" field. Only used when it contains a non-blank value |
 | ExifDateTime | When mode is ExifFullUpdate, this can have following values:<br>**FromFileDetails**: The script will make an attempt to extract the date & time from either the Filename (using the Input\<type\>Pos attributes in the settings file. When that fails, it will use the File's Creation Date and Time to set the ExifDateTime.<br>**\<Hardcoded-DateTime\>**: A valid Date&Time value, that will be used to set the ExifDateTime. Entering a value here is required!  |
@@ -128,21 +128,23 @@ etc.
 
 ## Using different configuration files
 
-To be able to support processing media taken by different devices - and when these devices use different file formats - you can create multiple configuration files. Just copy your settings.json file to a file with the name *\<device\>settings.json* and adjust the attributes where needed in that new file. Launch the script with parameter -SettingsFile *\<your-new-settingsfile-name\>*. Make sure the settingsfiles are in the same folder as the PoShmediaNames.ps1 script and you're good to go.
+To be able to support processing media taken by different devices - and when these devices use different filename formats - you can create multiple configuration files. Just copy your settings.json file to a file with the name *\<device\>settings.json* and adjust the attributes where needed in that new file. Launch the script with parameter -SettingsFile *\<your-new-settingsfile-name\>*. Make sure the settingsfiles are in the same folder as the PoShmediaNames.ps1 script and you're good to go.
+
+For safety, always run the program against a set of copies of the photo's and video's.
 
 ### About **processing scanned- or photo images**:
 
-Best approach to process scanned images depends on the images you scan. Look at the below scenario's for different approaches:
+Best approach to process scanned (paper) photo images depends on the images you scan. Look at the below scenario's for different approaches:
 
 ### Scanned images for an event that took place on a special day...
 
-... where the time&date does not matter to much, you can name your images all the same, and add a sequence number to heep the on the correct display order, e.g.\
+... where the time&date does not matter to much, you can name your images all the same, and add a sequence number to keep the on the correct display and sorting order, e.g.\
 010 Our daytrip to Rio.jpg\
 020 Our daytrip to Rio.jpg\
 030 Our daytrip to Rio-Stop at Gasstation.jpg\
 etc..
 
-Once you're done with all images, perform a "ExifFullUpdate" run, with "ExifDateTime" hardcoded to the date&time you took the trip
+Once you're done with all images, perform a "ExifFullUpdate" run, with the actual "ExifDateTime" hardcoded to the date&time you took the trip in the JSON file.
 
 ### Scanned images for an event that spans several days
 
@@ -156,7 +158,7 @@ etc..
 
 Once you're done with all images, perform a "ExifFullUpdate" run, with "ExifDateTime" coded with value "FromFileDetails".
 
-### Photo's
+### Digital photo's and Video's
 
 Just run a "Standard" run, that should do the trick.
 
