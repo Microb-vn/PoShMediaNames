@@ -30,7 +30,7 @@ Function Read_Config {
             $dummy = $config.FileTitle
         }
         Catch {
-            Return "When mode is ExifFullUpdate, attributes, ExifDeviceMake, ExifDeviceModel, ExifDateTime, and FileTitle must also be defined"
+            Return "When mode is ExifFullUpdate, attributes ExifDeviceMake, ExifDeviceModel, ExifDateTime, and FileTitle must also be defined"
         }
         If ($config.ExifDateTime -ne "FromFileDetails") {
             try{
