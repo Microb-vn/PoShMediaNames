@@ -22,7 +22,7 @@ Function Update_ExifData {
 	)
 
 	if (!(Test-Path -LiteralPath $FileName)) {
-		Return "Function Update_ExifData: Failed to update ExifData, could not file file $filename"
+		Return "Function Update_ExifData: Failed to update ExifData, could not find file $filename"
 	}
 
 	$File = $FileName
