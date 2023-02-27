@@ -2,9 +2,11 @@
 
 A set of powershell scripts to easier organize/standardize you photo and video file library based on the picture and video filenames.
 
-I developed this because of a personal desire to standardize my photo and video library. This script helped me to organize my pictures and videos based on the filename, which - after runnning this script - includes the date the media is created in a standard format. This makes the media more easy to organize and sort, even if you have multiple imaging devices that use different file naming standards to store their photos/videos.
+I developed this because of a personal desire to standardize my photo and video library. This script helped me to organize my pictures and videos based on the filename, which - after runnning this script - includes the date and time the media is created in a standard format. This makes the media more easy to organize and sort, even if you have multiple imaging devices that use different file naming standards to store their photos/videos.
 
 The project may not suit your needs, but if it does, feel free to use it.
+
+As this project is written in Powershell, the target platform is Windows. For Linux users there is also a project that perform similar actions written in Python. You can find that project [here](https://github.com/Microb-vn/pyMediaNames)
 
 # How it works
 
