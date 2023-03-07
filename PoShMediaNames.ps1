@@ -1,26 +1,28 @@
 <#
 .SYNOPSIS
- Dit programmaatje verzorgt een makkelijke manier om namen van digitale
- fotos te standaardizeren.
+ This script provides you with an easy method to standarize your Photo and Video
+ filenames.
 .DESCRIPTION
- Het programma zal trachten foto's en videos in een map te analyseren en 
- de namen van de foto's en video  te wijzigen zodat ze allemaal voldoen aan
- de volgende conventie:
+ The script will make an attempt to analyze photo and video files in a given
+ folder, and update the names of these files to include a standardized date and
+ time stamp. After running the script, all will ideally will look like:
 
- {datum&tijd} - {oorspronkelijke bestandsnaam}
+ {formatted_date&time} - {original_or_desired_new_filename}
 
- De wijze waarop datum en tijd bepaald worden is - in deze volgorde:
- - Alleen bij foto's wordt gezocht naar zgn Exif (EXchangeable Image File) data. 
- - De naam van het bestand wordt geanalyseerd.
+ The way the date and time is determined is:
+ - For Photo file, the EXIF (EXchangeable Image File) data will be used
+ - When no EXIF date can be detected (so, also for Video files) the filename
+   is analyzed
+ - When that fails, the file creation data is used
  
- Het te verwachten datum/tijd formaat van de media bestandsnamen kan worden 
- ingesteld in het settings.json bestand. De meeste digitale camera's verwerken
- de datum en tijd wanneer de opname gemaakt is in de bestandsnaam.
- 
- Het gewenste datum&tijd formaat in de uitvoerbestandsnaam kan ook worden opgegeven
- in het settings.json bestand.
+ The date and time format that can be expected in the media files can be configured
+ in a json configuration file (default file is settings.json). Most digital camera's
+ create filename that include this information in a specific format.
+
+ The desired new date format, and a preference for composing a new filename, can also 
+ be specified in the settingsfile
 .EXAMPLE
- TRANSLATE IN ENGLISH!!!
+ See markdown document that is included in this project.
 #>
 
 param ( 
@@ -108,10 +110,6 @@ Write-Message "INFO" "Examine all media files"
 foreach ($file in $AllFiles) {
     $FileObject = $null
     Write-Message "INFO" "------------------------------------------------"
-    if (($File.Fullname -like "*].*") -and ($config.mode -eq "Standard")) {
-        Write-Message "WARNING" "It looks like file ($($File.Name)) has been processed before; will take no action!"
-        Continue
-    }
     foreach ($Object in $config.objects) {
         if ($Object.Identifiers -contains $file.Extension) {
             $FileObject = $Object
@@ -120,25 +118,12 @@ foreach ($file in $AllFiles) {
     }
     if ($FileObject) {
         if ($FileObject.Type -eq "Photo") {
-            Write-Message "INFO" "File $($file.fullname) is a PHOTO file; will process it as such in $($config.mode) mode"
-            if ($config.mode -eq "Standard") {
-                Process_Photo $file $FileObject
-            }
-            Else {
-                Process_Photo_Exif $file $FileObject $config
-            }
-        }
-        ElseIf ($FileObject.Type -eq "Video") {
-            if ($Config.mode -ne "Standard") {
-                Write-Message "WARNING" "File $($file.FullName) is a VIDEO file; ExifFullUpdate for Video files is not supported. Skipped!"
-            }
-            Else {
-            Write-Message "INFO" "File $($file.FullName) is a VIDEO file; will process it as such"
-            Process_Video $file $FileObject
-            }
+            Write-Message "INFO" "File $($file.fullname) is a PHOTO file; will process it as such"
+            Process_Photo $file $FileObject $config
         }
         Else {
-            Write-Message "FATAL" "THIS SHOULD NEVER HAPPEN. INFORM PROGRAMMER (OBJECT FOUND FOR FILE THAT IS PHOTO NOR VIDEO!!)"
+            Write-Message "INFO" "File $($file.FullName) is a VIDEO file; will process it as such"
+            Process_Video $file $FileObject $config
         }
     }
     Else {

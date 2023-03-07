@@ -1,7 +1,8 @@
 function Process_Photo {
     param (
         $filename,
-        $fileobject 
+        $fileobject,
+        $config 
     )
 
     $file = $filename
@@ -11,7 +12,7 @@ function Process_Photo {
     $InputHourPos = $fileobject.InputHourPos
     $InputMinutePos = $fileobject.InputMinutePos
     $InputSecondPos = $fileobject.InputSecondPos
-    $DesiredOutputMask = $fileobject.DesiredOutputMask
+    $DesiredOutputMask = $config.DesiredOutputMask
     
     # Try to extract the Exif data
     $ExifData = Extract_ExifData $file.FullName
@@ -19,12 +20,12 @@ function Process_Photo {
         Write-Message "INFO" "Found EXIF data in photo file ($($File.Name))."
         Try {
             # Try to get date info
-            $yyyy = $ExifData.Data.Substring(0, 4)
-            $mm = $ExifData.Data.Substring(5, 2)
-            $dd = $ExifData.Data.Substring(8, 2)
-            $hour = $ExifData.Data.Substring(11, 2)
-            $minute = $ExifData.Data.Substring(14, 2)
-            $second = $ExifData.Data.Substring(17, 2)
+            $yyyy = $ExifData.date.Substring(0, 4)
+            $mm = $ExifData.date.Substring(5, 2)
+            $dd = $ExifData.date.Substring(8, 2)
+            $hour = $ExifData.date.Substring(11, 2)
+            $minute = $ExifData.date.Substring(14, 2)
+            $second = $ExifData.date.Substring(17, 2)
             $FileNameDate = Get-Date -Year $yyyy -Month $mm -Day $dd -Hour $hour -Minute $minute -Second $Second
             $ExifDate = $True
         }
@@ -69,7 +70,7 @@ function Process_Photo {
         }
     }
     # Change the date/time in the desired format
-    $DateInDesiredFormat = get-date -Date $FileNameDate -f "$($FileObject.DesiredOutputMask)"
+    $DateInDesiredFormat = get-date -Date $FileNameDate -f $DesiredOutputMask
     if ($File.Name.StartsWith($DateInDesiredFormat)) {
         Write-Message "INFO" "Found desired date ($DateInDesiredFormat); filename ($($File.Name)) already has this format, no action required"
         $ExifFileName = $File.FullName

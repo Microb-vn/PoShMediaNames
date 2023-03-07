@@ -59,7 +59,7 @@ Function Extract_ExifData {
         "X_Resolution", `
         "Y_Resolution", `
         "Color_Space", `
-        "Data", `
+        "Date", `
         "Title", `
         "Author", `
         "File_Source", `
@@ -397,7 +397,7 @@ Function Extract_ExifData {
         default { $Return_Object.Color_Space = "" }
     }
 
-    $Return_Object.Data = $dateTaken
+    $Return_Object.Date = $dateTaken
     $Return_Object.Title = $Title
     $Return_Object.Author = $Author
 
