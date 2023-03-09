@@ -1,6 +1,6 @@
 # PoShMediaNames
 
-A set of powershell scripts to easier organize/standardize you photo and video file library based on the picture and video filenames.
+A set of powershell scripts to easier organize/standardize your photo and video file library based on the picture and video filenames.
 
 I developed this because of a personal desire to standardize my photo and video library. These scripts helped me to organize my pictures and videos based on the filename, which - after runnning the main script - includes the date and time the media is created in the filename in a standard format. This makes the media more easy to organize and sort. Amongst other things, it resolves the issue that when you have multiple imaging devices that use different file naming standards to store their photos/videos: this set of scripts wil help you to convert all filenames to one common date&time filename standard.
 
@@ -48,6 +48,7 @@ The configuration is arranged with a *settings.json* file. This file typically l
     "ImageDescription":  "Scanned at {datetime}",
     "NewDateTime": "{datetime}",
     "NewFileName": "PreserveCurrent",
+    "DesiredOutputMask": "yyyy-MMdd HHmmss",
     "Objects": [
         {
             "Type": "Photo",
@@ -60,11 +61,10 @@ The configuration is arranged with a *settings.json* file. This file typically l
             "InputDayPos": "6",
             "InputHourPos": "9",
             "InputMinutePos": "11",
-            "InputSecondPos": "13",
-            "DesiredOutputMask": "yyyy-MMdd HHmmss"
+            "InputSecondPos": "13"
         },
         {
-            "Type": "video",
+            "Type": "Video",
             "Identifiers": [
                 ".mp4",
                 ".mov"
@@ -74,8 +74,7 @@ The configuration is arranged with a *settings.json* file. This file typically l
             "InputDayPos": "6",
             "InputHourPos": "9",
             "InputMinutePos": "11",
-            "InputSecondPos": "13",
-            "DesiredOutputMask": "yyyy-MMdd HHmmss"
+            "InputSecondPos": "13"
         }
     ]
 }
@@ -150,7 +149,7 @@ Best approach to process scanned (paper) photo images depends on the images you 
 030 Our daytrip to Rio-Stop at Gasstation.jpg\
 etc..
 
-Once you're done with all images, perform a "ExifFullUpdate" run, with the actual "ExifDateTime" hardcoded to the date&time you took the trip in the JSON file.
+Once you're done with all images, perform a script execution, with the actual "NewDateTime" hardcoded to the date&time you took the trip in the JSON file.
 
 ### Scanned images for an event that spans several days
 
@@ -162,11 +161,11 @@ You name all images with a filename including a date&time, like this:
 2023-0629 081500 Our to Rio-Breakfast at the hotel.jpg\
 etc..
 
-Once you're done with all images, perform a "ExifFullUpdate" run, with "ExifDateTime" coded with value "FromFileDetails".
+Once you're done with all images, perform a script execution, with "NewDateTime" coded with value "FromFileDetails". Make sure that the Input\<xxx\>Pos values are correctly specified.
 
 ### Digital photo's and Video's
 
-Running the script with the "NewDateTime" set to "FromFileDetails" (and the correct nput<xxx>pos positions according to the file names), that should do the trick. When you want to process photos and videos that span several events, and want to show that in the media names, you could:
+Running the script with the "NewDateTime" set to "FromFileDetails" (and the correct Input\<xxx\>pos positions according to the file names), that should do the trick. When you want to process photos and videos that span several events, and want to show that in the media names, you could:
 
 - Place each set of media files for an event in a subfolder
 - Give each of the subfolders the name of the event
@@ -187,6 +186,6 @@ Use the provided cmd file to launch the script, like described below:
 
 > *For advanced users: If you have Powershell Core installed and rather work with that version of powershell, you can change the powershell Executable path in the third line of the cmd file to point to the Powershell Core executable (usually %ProgramFiles%\\PowerShell\7\pwsh.exe)*
 
-# Proposed changes
+# Proposed/Scheduled changes
 
 None
