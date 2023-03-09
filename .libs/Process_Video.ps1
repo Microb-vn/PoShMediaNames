@@ -51,7 +51,7 @@ function Process_Video {
         }
     }
     Else {
-        fileNameDate = $config.NewDateTime | get-date
+        $fileNameDate = $config.NewDateTime | get-date
     }
 
     # Change the date/time in the desired format

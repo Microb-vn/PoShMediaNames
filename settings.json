@@ -1,11 +1,11 @@
 {
    "ProcessFolder": ".\\ProcessFolder",
+   "ImageDescription": "",
    "ExifDeviceMake": "",
    "ExifDeviceModel": "",
    "NewDateTime": "FromFileDetails",
    "DesiredOutputMask": "yyyy-MMdd HHmmss",
-   "ImageDescription": "Image was SCANNED at 05-02-2023 12:00:00",
-   "NewFileName": "FromParentFolder",
+   "NewFileName": "PreserveCurrent",
    "Objects": [
         {
             "Type": "Photo",

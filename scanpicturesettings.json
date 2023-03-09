@@ -2,10 +2,10 @@
     "ProcessFolder": ".\\ProcessFolder",
     "ExifDeviceMake": "HP",
     "ExifDeviceModel": "MFP M180N (scanner)",
-    "NewDateTime": "16-07-2022 12:00:00",
+    "NewDateTime": "FromFileDetails",
     "DesiredOutputMask": "yyyy-MMdd HHmmss",
     "ImageDescription": "Image was SCANNED at 05-02-2023 12:00:00",
-    "NewFileName": "FromFileDetails",
+    "NewFileName": "PreserveCurrent",
     "Objects": [
         {
             "Type": "Photo",

@@ -22,14 +22,14 @@ Function Read_Config {
         $dummy = $config.ExifDeviceMake
         $dummy = $config.ExifDeviceModel
         $dummy = $config.ImageDescription
-        $dummy = $config.NewDateTime
+        $dummydate = $config.NewDateTime
     }
     Catch {
         Return "One (or more) of the attributes ExifDeviceMake, ExifDeviceModel, NewDateTime or ImageDescription is missing"
     }
-    If ($dummy -ne "FromFileDetails") {
+    If ($dummydate -ne "FromFileDetails") {
         try{
-            $Dummy = $dummy | Get-Date
+            $Dummy = $dummydate | Get-Date
         }
         Catch {
             Return "The specified NewDateTime ($($Config.NewDateTime)) in the settingsfile ($settingsFileName) is not a valid date; use your localized date format, or specify 'FromFileDetails'!"
@@ -51,6 +51,11 @@ Function Read_Config {
         Return "NewFileName parameter is missing from $settingsfilename."
 
     }
+    # Fixed date AND fixed new filename or "from parrent folder"
+    If (($dummydate -ne "FromFileDetails") -and  ($dummy -ne "PreserveCurrent")) {
+        Return "NewFileDate parameter is a fixed date and NewFileName is not PreserveCurrent; this will result in duplicate filenames!"
+    }
+
 
     # Number of Objects
     if ($config.Objects.Count -ne 2) {

@@ -98,7 +98,7 @@ function Process_Photo {
         }
     }
     Else {
-        fileNameDate = $config.NewDateTime | get-date
+        $fileNameDate = $config.NewDateTime | get-date
     }
     # Do we need to change the file name?
     $fileNameNoExt = $file.Name.replace($file.Extension, "")
