@@ -1,7 +1,12 @@
 {
-    "Mode": "Standard",
-    "ProcessFolder": ".\\ProcessFolder",
-    "Objects": [
+   "ProcessFolder": ".\\ProcessFolder",
+   "ImageDescription": "",
+   "ExifDeviceMake": "",
+   "ExifDeviceModel": "",
+   "NewDateTime": "FromFileDetails",
+   "DesiredOutputMask": "yyyy-MMdd HHmmss",
+   "NewFileName": "PreserveCurrent",
+   "Objects": [
         {
             "Type": "Photo",
             "Identifiers": [
@@ -13,8 +18,7 @@
             "InputDayPos": "6",
             "InputHourPos": "9",
             "InputMinutePos": "11",
-            "InputSecondPos": "13",
-            "DesiredOutputMask": "yyyy-MMdd HHmmss"
+            "InputSecondPos": "13"
         },
         {
             "Type": "video",
@@ -27,8 +31,7 @@
             "InputDayPos": "6",
             "InputHourPos": "9",
             "InputMinutePos": "11",
-            "InputSecondPos": "13",
-            "DesiredOutputMask": "yyyy-MMdd HHmmss"
+            "InputSecondPos": "13"
         }
     ]
 }

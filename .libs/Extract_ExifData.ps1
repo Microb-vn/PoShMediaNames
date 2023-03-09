@@ -46,7 +46,7 @@ Function Extract_ExifData {
     )
 
     If ($FileName -eq $null) {
-        return "Function Extract_ExifData - Usage: Extract_ExifData [image path]"
+        return "Function Extract_ExifData: Filename is missing - Usage: Extract_ExifData [image path]"
     }
     If ((Test-Path -LiteralPath $FileName) -ne $true) {
         return "Function Extract_ExifData - File -$FileName- not found"
@@ -59,11 +59,11 @@ Function Extract_ExifData {
         "X_Resolution", `
         "Y_Resolution", `
         "Color_Space", `
-        "Data", `
+        "Date", `
         "Title", `
         "Author", `
         "File_Source", `
-        "Maker", `
+        "Make", `
         "Model", `
         "Lens_Maker", `
         "Lens_Model", `
@@ -95,7 +95,12 @@ Function Extract_ExifData {
     [System.Reflection.Assembly]::LoadWithPartialName("System.Text") > $null
 
     # Create an Image object
-    $photo = [System.Drawing.Image]::FromFile($filename)
+    try {
+        $photo = [System.Drawing.Image]::FromFile($filename)
+    }
+    Catch {
+        return "Function Extract_ExifData: Error while loading image; File $filename is not a valid image"
+    }
 
     # Read out the date taken (string)
     $dateProperty = ReadAttribute(0x9003)
@@ -118,9 +123,9 @@ Function Extract_ExifData {
     $AuthorProperty = ReadAttribute(0x013b)
     $Author = ConvertToString($AuthorProperty.Value)
 
-    # Maker
-    $makerProperty = ReadAttribute(0x010f)
-    $maker = ConvertToString($makerProperty.Value)
+    # Make
+    $MakeProperty = ReadAttribute(0x010f)
+    $Make = ConvertToString($MakeProperty.Value)
 
     # Model
     $modelProperty = ReadAttribute(0x0110)
@@ -397,7 +402,7 @@ Function Extract_ExifData {
         default { $Return_Object.Color_Space = "" }
     }
 
-    $Return_Object.Data = $dateTaken
+    $Return_Object.Date = $dateTaken
     $Return_Object.Title = $Title
     $Return_Object.Author = $Author
 
@@ -408,7 +413,7 @@ Function Extract_ExifData {
         default { $Return_Object.File_Source = "" }
     }
 
-    $Return_Object.Maker = $maker
+    $Return_Object.Make = $Make
     $Return_Object.Model = $model
     $Return_Object.Lens_Maker = $LensMaker
     $Return_Object.Lens_Model = $LensModel
