@@ -103,7 +103,7 @@ if ($config.GetType().Name -eq "String") {
 # Find and collect all files from the ProcessFolder (RECURSIVELLY!)
 Write-Message "INFO" "Collect all media filenames from folder $($config.ProcessFolder)"
 
-$AllFiles = Get-ChildItem -Path $config.ProcessFolder -Recurse | Where-Object { $_.PSIsContainer -ne $true } | Select FullName, Name, Extension
+$AllFiles = Get-ChildItem -Path $config.ProcessFolder -Recurse | Where-Object { $_.PSIsContainer -ne $true } | Select-Object FullName, Name, Extension, Directory
 
 # Go thru all the files one by one to determine what type of file it is
 Write-Message "INFO" "Examine all media files"
