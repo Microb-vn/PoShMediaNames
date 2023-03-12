@@ -24,7 +24,8 @@
             "Type": "video",
             "Identifiers": [
                 ".mp4",
-                ".mov"
+                ".mov",
+                ".avi"
             ],
             "InputYearPos": "0",
             "InputMonthPos": "4",
